@@ -1,0 +1,144 @@
+/* react-big-calendar style overrides for Brandlab Super */
+
+.rbc-calendar {
+  font-family: inherit;
+}
+
+.rbc-header {
+  padding: 8px 4px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.rbc-month-view,
+.rbc-time-view {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid hsl(var(--border));
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid hsl(var(--border));
+}
+
+.rbc-header + .rbc-header {
+  border-left: 1px solid hsl(var(--border));
+}
+
+.rbc-off-range-bg {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.rbc-today {
+  background-color: hsl(var(--primary) / 0.05);
+}
+
+.rbc-event {
+  border: none !important;
+  padding: 2px 6px !important;
+  font-size: 0.75rem !important;
+  border-radius: 4px !important;
+}
+
+.rbc-event:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 1px;
+}
+
+.rbc-event-label {
+  display: none;
+}
+
+.rbc-show-more {
+  font-size: 0.7rem;
+  color: hsl(var(--primary));
+  font-weight: 500;
+}
+
+.rbc-toolbar {
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rbc-toolbar button {
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.375rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.rbc-toolbar button:hover {
+  background-color: hsl(var(--accent));
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.rbc-toolbar-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.rbc-date-cell {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.rbc-date-cell.rbc-now {
+  font-weight: 700;
+  color: hsl(var(--primary));
+}
+
+/* Time view */
+.rbc-time-header-content {
+  border-left: 1px solid hsl(var(--border));
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.rbc-time-slot {
+  font-size: 0.7rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top: 1px solid hsl(var(--border) / 0.5);
+}
+
+.rbc-current-time-indicator {
+  background-color: hsl(var(--destructive));
+  height: 2px;
+}
+
+/* Drag and drop */
+.rbc-addons-dnd .rbc-addons-dnd-row-body {
+  position: relative;
+}
+
+.rbc-addons-dnd-drag-preview {
+  opacity: 0.7;
+}
+
+/* Selection */
+.rbc-slot-selection {
+  background-color: hsl(var(--primary) / 0.1);
+  border: 1px solid hsl(var(--primary) / 0.3);
+}
