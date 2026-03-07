@@ -22,6 +22,7 @@ import { CharacterCounter } from '@/components/character-counter';
 import { PlatformCheckboxGroup } from '@/components/platform-checkbox-group';
 import { CommentsPanel } from '@/components/comments-panel';
 import { AssetPanel } from '@/components/asset-panel';
+import { HashtagInsertPanel } from '@/components/hashtag-insert-panel';
 import { PLATFORM_LABELS, PLATFORM_CHAR_LIMITS } from '@/utils/platform';
 import { ArrowLeft } from 'lucide-react';
 import type {
@@ -350,6 +351,24 @@ export default function ComposerPage() {
               <p className="text-xs text-muted-foreground">
                 Timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
               </p>
+            </CardContent>
+          </Card>
+
+          {/* Hashtags */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Hashtags</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <HashtagInsertPanel
+                workspaceId={workspace.id}
+                onInsert={(text) => {
+                  if (!draft) return;
+                  const current = draft.master_caption || '';
+                  const separator = current && !current.endsWith(' ') ? ' ' : '';
+                  updateField('master_caption', current + separator + text);
+                }}
+              />
             </CardContent>
           </Card>
 
