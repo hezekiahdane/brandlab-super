@@ -39,7 +39,7 @@ export async function GET(
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   // Resolve author emails
-  const authorIds = [...new Set(comments.map((c) => c.author_user_id).filter(Boolean))];
+  const authorIds = Array.from(new Set(comments.map((c) => c.author_user_id).filter(Boolean)));
   const emailMap = new Map<string, string>();
 
   for (const uid of authorIds) {
