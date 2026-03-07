@@ -51,3 +51,5 @@ export type {
   UpdateDraftRequest,
   StatusTransitionRequest,
 } from './draft';
+
+export type { Comment, CreateCommentRequest } from './comment';

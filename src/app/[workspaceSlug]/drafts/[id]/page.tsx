@@ -20,6 +20,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { StatusActionBar } from '@/components/status-action-bar';
 import { CharacterCounter } from '@/components/character-counter';
 import { PlatformCheckboxGroup } from '@/components/platform-checkbox-group';
+import { CommentsPanel } from '@/components/comments-panel';
 import { PLATFORM_LABELS, PLATFORM_CHAR_LIMITS } from '@/utils/platform';
 import { ArrowLeft } from 'lucide-react';
 import type {
@@ -338,6 +339,16 @@ export default function ComposerPage() {
               <p className="text-xs text-muted-foreground">
                 Timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
               </p>
+            </CardContent>
+          </Card>
+
+          {/* Internal Notes */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Internal Notes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CommentsPanel workspaceId={workspace.id} draftId={params.id} />
             </CardContent>
           </Card>
         </div>
