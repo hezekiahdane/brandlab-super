@@ -14,7 +14,10 @@ if (!url || !key) {
   process.exit(1);
 }
 
-const supabase = createClient(url, key);
+const safeUrl: string = url;
+const safeKey: string = key;
+
+const supabase = createClient(safeUrl, safeKey);
 
 async function runMigration() {
   const sqlPath = join(__dirname, '..', 'supabase', 'migrations', '00001_initial_schema.sql');
@@ -24,11 +27,11 @@ async function runMigration() {
   const { error } = await supabase.rpc('', {} as never).throwOnError();
 
   // Use the REST endpoint to execute raw SQL
-  const res = await fetch(`${url}/rest/v1/rpc/`, {
+  const res = await fetch(`${safeUrl}/rest/v1/rpc/`, {
     method: 'POST',
     headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
+      apikey: safeKey,
+      Authorization: `Bearer ${safeKey}`,
       'Content-Type': 'application/json',
     },
   });
@@ -40,7 +43,7 @@ async function runMigration() {
   console.log('The migration file is at: supabase/migrations/00001_initial_schema.sql');
   console.log('');
   console.log('To apply it, go to your Supabase dashboard:');
-  console.log(`  ${url.replace('.supabase.co', '.supabase.co')}`);
+  console.log(`  ${safeUrl.replace('.supabase.co', '.supabase.co')}`);
   console.log('  → SQL Editor → New query → Paste the migration SQL → Run');
   console.log('');
   console.log('Or install the Supabase CLI and run:');
