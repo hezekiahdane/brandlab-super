@@ -110,6 +110,14 @@ Content creation follows a structured, status-driven workflow. Drafts can be ini
 - A dedicated notes panel is available on every draft for internal team communication — separate from the caption editor and external comment thread.
 - Team members can @-mention assignees within internal notes to trigger targeted in-app notifications.
 
+#### 4C.6 – Draft Deletion & Archival
+
+- **Soft Delete (Archive):** Managers can archive any draft regardless of its current status. Archived drafts are hidden from all views (drafts list, calendar, master calendar, my-work) but their data is preserved in the database.
+- **Creator Delete:** Draft creators (Copy Assignee or Creatives Assignee assigned to the draft) can archive their own drafts while the draft is still in `Idea` status.
+- **Permanent Delete:** Managers can permanently delete archived drafts. This removes the draft, all associated assets (from storage), comments, and notifications from the database. This action is irreversible.
+- **Confirmation Required:** All delete actions (soft and permanent) require a confirmation dialog to prevent accidental data loss.
+- **No Bulk Delete:** Drafts must be deleted individually to prevent accidental mass deletion.
+
 ---
 
 ### 4D. Detailed Status Workflow & Approvals
@@ -125,7 +133,7 @@ The platform enforces a linear, permission-gated status progression. Status chan
 | **Creatives for Review** | Creatives Assignee uploads collaterals and marks ready. Manager is notified to review. |
 | **Creatives Revision** | Manager requests creative changes. Creatives Assignee is notified. |
 | **For Scheduling** | Manager approves creatives. Post is locked and ready to schedule. |
-| **Scheduled** | Any permitted user confirms the publishing date/time. Post is queued for automated publishing. |
+| **Scheduled** | Any permitted user confirms the publishing date/time. Post is queued for automated publishing. Manager can **unschedule** the post, reverting it to `For Scheduling` and clearing the publish date. |
 
 #### External Approval Flow
 

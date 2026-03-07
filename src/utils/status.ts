@@ -54,7 +54,9 @@ export const VALID_TRANSITIONS: Record<ContentStatus, TransitionRule[]> = {
   for_scheduling: [
     { to: 'scheduled', allowedRoles: ['manager'] },
   ],
-  scheduled: [],
+  scheduled: [
+    { to: 'for_scheduling', allowedRoles: ['manager'] },
+  ],
 };
 
 /** Button labels for the status action bar */
@@ -68,6 +70,7 @@ export const TRANSITION_LABELS: Record<string, { label: string; variant: 'defaul
   'creatives_for_review->for_scheduling': { label: 'Approve Creatives', variant: 'default' },
   'creatives_revision->creatives_for_review': { label: 'Resubmit Creatives', variant: 'default' },
   'for_scheduling->scheduled': { label: 'Schedule', variant: 'default' },
+  'scheduled->for_scheduling': { label: 'Unschedule', variant: 'destructive' },
 };
 
 export function getValidTransitions(

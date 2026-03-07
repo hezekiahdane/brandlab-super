@@ -37,7 +37,8 @@ export async function GET(
   let query = admin
     .from('content_drafts')
     .select('*')
-    .eq('workspace_id', workspaceId);
+    .eq('workspace_id', workspaceId)
+    .is('archived_at', null);
 
   if (status && ALL_STATUSES.includes(status as ContentStatus)) {
     query = query.eq('status', status);

@@ -52,10 +52,19 @@ export async function POST(
     );
   }
 
+  // Build update payload
+  const updates: Record<string, unknown> = { status: body.new_status };
+
+  // When unscheduling, clear the publish date and Ayrshare post ID
+  if (draft.status === 'scheduled' && body.new_status === 'for_scheduling') {
+    updates.publish_at = null;
+    updates.ayrshare_post_id = null;
+  }
+
   // Perform transition
   const { data: updated, error } = await admin
     .from('content_drafts')
-    .update({ status: body.new_status })
+    .update(updates)
     .eq('id', draftId)
     .eq('workspace_id', workspaceId)
     .select()

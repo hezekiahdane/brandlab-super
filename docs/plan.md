@@ -159,6 +159,26 @@ Each milestone ends with a concrete "done when" checkpoint so progress is verifi
 
 ---
 
+## Milestone 8.5 — Draft Deletion & Unschedule
+
+**Goal:** Drafts can be archived (soft-deleted), permanently deleted, and scheduled posts can be unscheduled.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 8.5.1 | Add `archived_at` and `archived_by` columns to `content_drafts` via migration | Migration applied; columns exist |
+| 8.5.2 | Add `scheduled → for_scheduling` status transition (Manager-only) with "Unschedule" label | Manager can unschedule; publish_at and ayrshare_post_id cleared |
+| 8.5.3 | Update status transition API to clear `publish_at` and `ayrshare_post_id` on unschedule | Transitioning from scheduled to for_scheduling clears publish data |
+| 8.5.4 | Add `DELETE` handler to drafts API for soft-delete (archive) | Manager can archive any draft; assignee can archive own idea-status drafts |
+| 8.5.5 | Add permanent delete API endpoint (Manager-only, archived drafts only) | Manager can permanently delete archived drafts; associated storage files cleaned up |
+| 8.5.6 | Filter archived drafts from GET drafts query | Archived drafts hidden from list, calendar, and master views |
+| 8.5.7 | Add `archived_at` and `archived_by` to `ContentDraft` TypeScript interface | Types updated |
+| 8.5.8 | Add archive button + confirmation dialog to ComposerPage header | Trash icon visible per permission rules; confirmation dialog on click |
+| 8.5.9 | Add archive button + confirmation dialog to drafts list page rows | Per-row trash icon with confirmation; row removed from list on archive |
+| 8.5.10 | Update PRD with Section 4C.6 (Draft Deletion & Archival) and update Scheduled status row | PRD reflects archive and unschedule capabilities |
+| 8.5.11 | Update Tech Spec with archive columns, DELETE endpoints, and reverse transition | Tech Spec reflects all changes |
+
+---
+
 ## Milestone 9 — Engagement Heatmap
 
 **Goal:** Calendar displays engagement heatmap overlay with per-platform toggle.

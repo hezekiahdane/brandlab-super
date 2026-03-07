@@ -5,6 +5,18 @@ import Link from 'next/link';
 import { useWorkspace } from '@/hooks/use-workspace';
 import { StatusBadge } from '@/components/status-badge';
 import { CreateDraftDialog } from '@/components/create-draft-dialog';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import {
   Select,
   SelectContent,
@@ -12,12 +24,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Trash2 } from 'lucide-react';
 import { ALL_STATUSES, STATUS_LABELS } from '@/utils/status';
 import { PLATFORM_LABELS } from '@/utils/platform';
 import type { ContentDraft, ContentStatus, SocialPlatform } from '@/types';
 
 export default function DraftsPage() {
-  const { workspace } = useWorkspace();
+  const { workspace, membership } = useWorkspace();
   const [drafts, setDrafts] = useState<ContentDraft[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -46,6 +59,24 @@ export default function DraftsPage() {
       day: 'numeric',
       year: 'numeric',
     });
+  }
+
+  async function handleArchive(draftId: string) {
+    const res = await fetch(`/api/workspaces/${workspace.id}/drafts/${draftId}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      setDrafts((prev) => prev.filter((d) => d.id !== draftId));
+    }
+  }
+
+  function canDeleteDraft(draft: ContentDraft) {
+    if (membership.role === 'manager') return true;
+    if (draft.status !== 'idea') return false;
+    return (
+      draft.copy_assignee_id === membership.user_id ||
+      draft.creatives_assignee_id === membership.user_id
+    );
   }
 
   return (
@@ -95,6 +126,7 @@ export default function DraftsPage() {
                 <th className="px-4 py-3 text-left font-medium">Platforms</th>
                 <th className="px-4 py-3 text-left font-medium">Publish Date</th>
                 <th className="px-4 py-3 text-left font-medium">Updated</th>
+                <th className="px-4 py-3 text-right font-medium w-12"></th>
               </tr>
             </thead>
             <tbody>
@@ -123,6 +155,39 @@ export default function DraftsPage() {
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {formatDate(draft.updated_at)}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    {canDeleteDraft(draft) && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Archive this draft?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              &ldquo;{draft.title}&rdquo; will be hidden from all views. A manager
+                              can permanently delete it later.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleArchive(draft.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Archive
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
                   </td>
                 </tr>
               ))}

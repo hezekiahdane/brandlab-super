@@ -16,6 +16,8 @@ export interface ContentDraft {
   public_share_token: string | null;
   share_token_expires_at: string | null;
   ayrshare_post_id: string | null;
+  archived_at: string | null;
+  archived_by: string | null;
   created_at: string;
   updated_at: string;
 }

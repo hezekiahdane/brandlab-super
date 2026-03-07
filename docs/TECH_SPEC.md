@@ -113,11 +113,15 @@ The central table. Each row represents one piece of content moving through the w
 | `public_share_token` | uuid UNIQUE | NULL | Generated on-demand for external review |
 | `share_token_expires_at` | timestamptz | NULL | 30-day TTL from token generation |
 | `ayrshare_post_id` | text | NULL | Returned by Ayrshare after scheduling |
+| `archived_at` | timestamptz | NULL | Null = active; set when soft-deleted |
+| `archived_by` | uuid FK → users | NULL | User who archived the draft |
 | `created_at` | timestamptz | NOT NULL | Default: `now()` |
 | `updated_at` | timestamptz | NOT NULL | Auto-updated via DB trigger |
 
 > **Status ENUM:**
 > `idea` | `copy_for_review` | `copy_revision` | `for_creatives` | `creatives_for_review` | `creatives_revision` | `for_scheduling` | `scheduled`
+>
+> **Reverse Transition:** `scheduled → for_scheduling` (Manager-only). Clears `publish_at` and `ayrshare_post_id`.
 
 ### 2.5 `draft_assets`
 
@@ -229,6 +233,8 @@ All endpoints are Next.js Route Handlers under `/api`. Authentication is enforce
 | `POST` | `/api/workspaces/:workspaceId/drafts/:draftId/share` | Generate public share token (Manager only) |
 | `DELETE` | `/api/workspaces/:workspaceId/drafts/:draftId/share` | Revoke public share token (Manager only) |
 | `POST` | `/api/workspaces/:workspaceId/drafts/:draftId/publish` | Submit to Ayrshare for scheduled publishing |
+| `DELETE` | `/api/workspaces/:workspaceId/drafts/:draftId` | Soft-delete (archive) a draft. Manager: any draft. Creator: own `idea`-status drafts only. |
+| `DELETE` | `/api/workspaces/:workspaceId/drafts/:draftId/permanent` | Hard-delete an archived draft and its storage assets. Manager only. |
 
 ### 3.4 Assets
 

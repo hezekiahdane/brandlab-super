@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useWorkspace } from '@/hooks/use-workspace';
 import { Input } from '@/components/ui/input';
@@ -23,8 +23,20 @@ import { PlatformCheckboxGroup } from '@/components/platform-checkbox-group';
 import { CommentsPanel } from '@/components/comments-panel';
 import { AssetPanel } from '@/components/asset-panel';
 import { HashtagInsertPanel } from '@/components/hashtag-insert-panel';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { PLATFORM_LABELS, PLATFORM_CHAR_LIMITS } from '@/utils/platform';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import type {
   ContentDraft,
   ContentStatus,
@@ -36,6 +48,7 @@ const NONE_VALUE = '__none__';
 
 export default function ComposerPage() {
   const params = useParams<{ workspaceSlug: string; id: string }>();
+  const router = useRouter();
   const { workspace, membership } = useWorkspace();
 
   const [draft, setDraft] = useState<ContentDraft | null>(null);
@@ -109,6 +122,15 @@ export default function ComposerPage() {
     saveDraft({ platform_overrides: overrides });
   }
 
+  async function handleArchive() {
+    const res = await fetch(`/api/workspaces/${workspace.id}/drafts/${params.id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      router.push(`/${workspace.slug}/drafts`);
+    }
+  }
+
   if (loading || !draft) {
     return (
       <div className="p-8">
@@ -118,6 +140,10 @@ export default function ComposerPage() {
   }
 
   const isManager = membership.role === 'manager';
+  const isAssignee =
+    draft.copy_assignee_id === membership.user_id ||
+    draft.creatives_assignee_id === membership.user_id;
+  const canDelete = isManager || (isAssignee && draft.status === 'idea');
   const effectiveCaption = (platform: SocialPlatform) =>
     draft.platform_overrides?.[platform] || draft.master_caption || '';
 
@@ -138,13 +164,42 @@ export default function ComposerPage() {
             className="border-none text-lg font-semibold shadow-none focus-visible:ring-0 px-0 h-auto"
           />
         </div>
-        <span className="text-xs text-muted-foreground">
-          {saveStatus === 'saving'
-            ? 'Saving...'
-            : saveStatus === 'saved'
-              ? 'Saved'
-              : ''}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted-foreground">
+            {saveStatus === 'saving'
+              ? 'Saving...'
+              : saveStatus === 'saved'
+                ? 'Saved'
+                : ''}
+          </span>
+          {canDelete && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Archive this draft?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This draft will be hidden from all views including the calendar, drafts list,
+                    and master views. A manager can permanently delete it later.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleArchive}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Archive
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
       </div>
 
       {/* Two-column layout */}
