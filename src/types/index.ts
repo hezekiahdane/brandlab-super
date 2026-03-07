@@ -44,3 +44,10 @@ export type {
   InviteMemberRequest,
   UpdateMemberRequest,
 } from './workspace';
+
+export type {
+  ContentDraft,
+  CreateDraftRequest,
+  UpdateDraftRequest,
+  StatusTransitionRequest,
+} from './draft';
