@@ -34,3 +34,13 @@ export type AssetFileType = 'image' | 'video' | 'thumbnail';
 export type AssetSource = 'upload' | 'google_drive' | 'canva';
 
 export type CommentType = 'internal' | 'external';
+
+export type {
+  Workspace,
+  WorkspaceMember,
+  WorkspaceMemberWithEmail,
+  CreateWorkspaceRequest,
+  UpdateWorkspaceRequest,
+  InviteMemberRequest,
+  UpdateMemberRequest,
+} from './workspace';

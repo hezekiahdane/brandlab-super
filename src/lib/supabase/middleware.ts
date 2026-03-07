@@ -24,7 +24,31 @@ export async function updateSession(request: NextRequest) {
   );
 
   // Refresh the session — this keeps the user logged in.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+
+  // Public routes that don't require auth redirect
+  const isPublicRoute =
+    pathname.startsWith('/auth') ||
+    pathname.startsWith('/share') ||
+    pathname.startsWith('/api');
+
+  // Redirect unauthenticated users to login (API routes handle their own 401s)
+  if (!user && !isPublicRoute) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/auth/login';
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect authenticated users away from login page
+  if (user && pathname === '/auth/login') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/workspaces';
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }
