@@ -21,6 +21,7 @@ import { StatusActionBar } from '@/components/status-action-bar';
 import { CharacterCounter } from '@/components/character-counter';
 import { PlatformCheckboxGroup } from '@/components/platform-checkbox-group';
 import { CommentsPanel } from '@/components/comments-panel';
+import { AssetPanel } from '@/components/asset-panel';
 import { PLATFORM_LABELS, PLATFORM_CHAR_LIMITS } from '@/utils/platform';
 import { ArrowLeft } from 'lucide-react';
 import type {
@@ -225,6 +226,16 @@ export default function ComposerPage() {
               Select target platforms above to customize per-platform captions.
             </p>
           )}
+
+          {/* Media Assets */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Media Assets</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AssetPanel workspaceId={workspace.id} draftId={params.id} />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right column */}

@@ -53,3 +53,5 @@ export type {
 } from './draft';
 
 export type { Comment, CreateCommentRequest } from './comment';
+
+export type { DraftAsset, UpdateAssetRequest } from './asset';
