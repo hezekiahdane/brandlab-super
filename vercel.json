@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/refresh-heatmap",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/check-token-expiry",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

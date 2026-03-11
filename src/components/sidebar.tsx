@@ -6,6 +6,7 @@ import { Calendar, FileText, Image, Hash, Settings, LayoutDashboard, User } from
 import { cn } from '@/lib/utils';
 import { WorkspaceSwitcher } from '@/components/workspace-switcher';
 import { UserMenu } from '@/components/user-menu';
+import { NotificationBell } from '@/components/notification-bell';
 import { Separator } from '@/components/ui/separator';
 import type { Workspace, WorkspaceMember } from '@/types';
 
@@ -79,9 +80,10 @@ export function Sidebar({
 
       <Separator />
 
-      {/* User menu */}
+      {/* User menu + notifications */}
       <div className="flex items-center gap-2 p-4">
         <UserMenu />
+        <NotificationBell />
       </div>
     </aside>
   );

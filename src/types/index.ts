@@ -57,3 +57,7 @@ export type { Comment, CreateCommentRequest } from './comment';
 export type { DraftAsset, UpdateAssetRequest } from './asset';
 
 export type { Hashtag, CreateHashtagRequest } from './hashtag';
+
+export type { Notification } from './notification';
+
+export type { SocialConnection } from './social-connection';

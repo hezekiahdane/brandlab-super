@@ -4,11 +4,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, dateFnsLocalizer, type View, type SlotInfo } from 'react-big-calendar';
 import withDragAndDrop, { type EventInteractionArgs } from 'react-big-calendar/lib/addons/dragAndDrop';
-import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addDays, subDays } from 'date-fns';
+import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addDays, subDays, getHours } from 'date-fns';
 import { enUS } from 'date-fns/locale/en-US';
 import { StatusBadge } from '@/components/status-badge';
 import { PLATFORM_LABELS } from '@/utils/platform';
 import { STATUS_EVENT_COLORS } from '@/utils/calendar';
+import { scoreToColor, heatmapKey } from '@/utils/heatmap';
 import {
   Popover,
   PopoverContent,
@@ -43,6 +44,8 @@ interface ContentCalendarProps {
   allWorkspaces?: boolean;
   workspaceNames?: Record<string, string>;
   workspaceSlugs?: Record<string, string>;
+  /** Heatmap scores keyed by "dayOfWeek_hourUtc" (e.g. "3_14" = Wednesday 2pm) */
+  heatmapData?: Map<string, number>;
 }
 
 export function ContentCalendar({
@@ -51,6 +54,7 @@ export function ContentCalendar({
   allWorkspaces,
   workspaceNames,
   workspaceSlugs,
+  heatmapData,
 }: ContentCalendarProps) {
   const router = useRouter();
   const [drafts, setDrafts] = useState<ContentDraft[]>([]);
@@ -223,6 +227,33 @@ export function ContentCalendar({
     );
   }
 
+  /** Heatmap background for week/day view time slots */
+  function slotPropGetter(date: Date) {
+    if (!heatmapData || heatmapData.size === 0) return {};
+    const day = date.getDay(); // 0-6
+    const hour = getHours(date); // 0-23
+    const score = heatmapData.get(heatmapKey(day, hour));
+    if (!score) return {};
+    return { style: { backgroundColor: scoreToColor(score) } };
+  }
+
+  /** Heatmap background for month view day cells (average of all hours) */
+  function dayPropGetter(date: Date) {
+    if (!heatmapData || heatmapData.size === 0) return {};
+    const day = date.getDay();
+    let total = 0;
+    let count = 0;
+    for (let h = 0; h < 24; h++) {
+      const score = heatmapData.get(heatmapKey(day, h));
+      if (score !== undefined) {
+        total += score;
+        count++;
+      }
+    }
+    if (count === 0) return {};
+    return { style: { backgroundColor: scoreToColor(total / count) } };
+  }
+
   if (loading) {
     return <p className="text-sm text-muted-foreground p-4">Loading calendar...</p>;
   }
@@ -245,6 +276,8 @@ export function ContentCalendar({
         onEventDrop={handleEventDrop}
         draggableAccessor={() => !allWorkspaces}
         eventPropGetter={eventStyleGetter}
+        slotPropGetter={slotPropGetter}
+        dayPropGetter={dayPropGetter}
         components={{
           event: EventComponent,
         }}

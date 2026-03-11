@@ -179,9 +179,10 @@ Each milestone ends with a concrete "done when" checkpoint so progress is verifi
 
 ---
 
-## Milestone 9 — Engagement Heatmap
+## Milestone 9 — Engagement Heatmap ✅
 
 **Goal:** Calendar displays engagement heatmap overlay with per-platform toggle.
+**Status:** COMPLETE — Heatmap API, global defaults migration (00004), scoreToColor utility, slotPropGetter/dayPropGetter on calendar, PlatformHeatmapToggle, Vercel cron stub.
 
 | # | Task | Done When |
 |---|------|-----------|
@@ -193,9 +194,10 @@ Each milestone ends with a concrete "done when" checkpoint so progress is verifi
 
 ---
 
-## Milestone 10 — Notification System
+## Milestone 10 — Notification System ✅
 
 **Goal:** Real-time in-app notifications with unread badge. Email notifications on status changes.
+**Status:** COMPLETE — Notification types, API routes, useNotifications hook with Realtime, NotificationBell in sidebar, Resend email client, React Email templates, webhook handler.
 
 | # | Task | Done When |
 |---|------|-----------|
@@ -209,9 +211,10 @@ Each milestone ends with a concrete "done when" checkpoint so progress is verifi
 
 ---
 
-## Milestone 11 — Social Account Connections
+## Milestone 11 — Social Account Connections ✅
 
 **Goal:** Managers can connect social media accounts via OAuth. Connection health is monitored.
+**Status:** COMPLETE — SocialConnection type, CRUD API, OAuth stubs (real Ayrshare deferred to M13), AES-256-GCM encryption util, SocialConnections UI on settings page, token expiry cron, health indicators.
 
 | # | Task | Done When |
 |---|------|-----------|

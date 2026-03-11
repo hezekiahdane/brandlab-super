@@ -3,6 +3,7 @@
 import { useWorkspace } from '@/hooks/use-workspace';
 import { WorkspaceSettingsForm } from '@/components/workspace-settings-form';
 import { MemberManagement } from '@/components/member-management';
+import { SocialConnections } from '@/components/social-connections';
 import { Separator } from '@/components/ui/separator';
 
 export default function WorkspaceSettingsPage() {
@@ -15,6 +16,8 @@ export default function WorkspaceSettingsPage() {
       <WorkspaceSettingsForm workspace={workspace} isManager={isManager} />
       <Separator />
       <MemberManagement workspaceId={workspace.id} isManager={isManager} />
+      <Separator />
+      <SocialConnections workspaceId={workspace.id} isManager={isManager} />
     </div>
   );
 }
